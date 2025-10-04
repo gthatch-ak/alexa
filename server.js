@@ -15,7 +15,7 @@ const BASE_URL = 'https://highlightly.p.rapidapi.com/highlights';
 // Utility to fetch highlights from Highlightly
 async function fetchHighlights(sport) {
     try {
-        const url = `${BASE_URL}/${sport}`;
+        const url = `${BASE_URL}?sport=${sport}`; // use query param
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -27,28 +27,13 @@ async function fetchHighlights(sport) {
         return data;
     } catch (err) {
         console.error(`Error fetching ${sport} highlights:`, err);
-        return null;
+        return { error: `Failed to fetch ${sport} highlights` };
     }
 }
 
-// Endpoints
+// Single test endpoint for MLS highlights
 app.get('/mls', async (req, res) => {
     const highlights = await fetchHighlights('mls');
-    res.json(highlights);
-});
-
-app.get('/epl', async (req, res) => {
-    const highlights = await fetchHighlights('epl');
-    res.json(highlights);
-});
-
-app.get('/rugby', async (req, res) => {
-    const highlights = await fetchHighlights('rugby');
-    res.json(highlights);
-});
-
-app.get('/nfl', async (req, res) => {
-    const highlights = await fetchHighlights('nfl');
     res.json(highlights);
 });
 
@@ -57,4 +42,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Highlightly proxy running on port ${PORT}`);
 });
-
